@@ -1360,6 +1360,15 @@ export default function GamePage({ }) {
                         </CardContent>
                     </Card>
                 </div>}
+                {mulliganing && <div style={{ margin: '10px' }}>
+                    <Card variant="outlined">
+                        <CardContent>
+                            <Typography variant="h2" style={{ display: 'flex', justifyContent: 'center' }}>
+                                Pick which cards to mulligan
+                            </Typography>
+                        </CardContent>
+                    </Card>
+                </div>}                
                 <GameLog log={gameState.log} />
                 <FormControl style={{
                     margin: '1px',
@@ -1446,7 +1455,7 @@ export default function GamePage({ }) {
                     {!gameOver && !mulliganing && <ResetButton onReset={handleReset} disabled={submittedMove || gameOver} />}
                     {!gameOver && <Button variant="contained" color="primary" size="large" style={{ margin: '10px' }} onClick={mulliganing ? handleSubmit : handleOpenDialog} disabled={submittedMove || gameOver}>
                         <Typography variant="h6">
-                            Submit
+                            {mulliganing ? 'Submit mulligan' : 'Submit'}
                         </Typography>
                     </Button>}
                 </div>
