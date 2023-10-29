@@ -872,6 +872,30 @@ def get_draft_pick(sess):
         return {'options': get_sample_card_templates_of_rarity('common', 5)}
 
 
+@app.route('/api/draft_pick', methods=['POST'])
+@api_endpoint
+def get_draft_pick_and_store_info(sess):
+    pick_num = request.args.get('pickNum')
+    
+    DEFAULT_RARE_CHANCE = 0.07
+
+    pick_num_to_rare_chance: dict[Optional[int], float] = {
+        1: 1,
+        2: 0.25,
+        3: 0.2,
+        4: 0.15,
+        5: 0.15,
+        18: 0.2,
+    }
+
+    rare_chance = pick_num_to_rare_chance.get(int(pick_num) if pick_num is not None else None) or DEFAULT_RARE_CHANCE
+
+    if random.random() < rare_chance:
+        return {'options': get_sample_card_templates_of_rarity('rare', 3)}
+    else:
+        return {'options': get_sample_card_templates_of_rarity('common', 5)}
+
+
 @app.route('/api/games/<game_id>/rematch', methods=['POST'])
 @api_endpoint
 def rematch(sess, game_id):
