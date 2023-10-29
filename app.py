@@ -888,14 +888,13 @@ def get_draft_pick_and_store_info(sess):
 
     last_card_options = data.get('lastCardOptions')
     last_card_picked = data.get('lastCardPicked')
+    unique_draft_identifier = data.get('uniqueDraftIdentifier')
 
-    print(last_card_options)
-    print(last_card_picked)
-
-    if last_card_options != []:
+    if last_card_options and last_card_picked:
         draft_pick = DraftPick(
             username=username,
             pick_num=pick_num,
+            unique_draft_identifier=unique_draft_identifier,
         )
         sess.add(draft_pick)
         sess.commit()

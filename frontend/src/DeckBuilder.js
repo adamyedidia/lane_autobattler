@@ -26,7 +26,7 @@ import TcgCard from './TcgCard';
 import { URL } from './settings';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { objectToArray } from './utils';
+import { objectToArray, generateRandomString } from './utils';
 import { useSocket } from './SocketContext';
 import LaneRewardDisplay from './LaneRewardDisplay';
 import Timer from './Timer';
@@ -47,7 +47,7 @@ const calculateManaCurve = (deck, cards) => {
   return manaCurve;
 };
 
-function DraftComponent({ cardPool, setCurrentDeck, currentDeck, setDrafting, saveDeck, currentLaneReward, setCurrentLaneReward, isTimedDraft, draftStartTime }) {
+function DraftComponent({ cardPool, setCurrentDeck, currentDeck, setDrafting, saveDeck, currentLaneReward, setCurrentLaneReward, isTimedDraft, draftStartTime, uniqueDraftIdentifier }) {
   const [draftOptions, setDraftOptions] = useState([]);
   const [secondsElapsed, setSecondsElapsed] = useState(null);
   const [timerHasElapsed, setTimerHasElapsed] = useState(false);
@@ -71,6 +71,7 @@ function DraftComponent({ cardPool, setCurrentDeck, currentDeck, setDrafting, sa
         username: localStorage.getItem('userName'),
         lastCardOptions: draftOptions.map(card => card.name),
         lastCardPicked: currentDeck.length > 0 ? currentDeck[currentDeck.length - 1] : null,
+        uniqueDraftIdentifier: uniqueDraftIdentifier,
       }
 
       fetch(`${URL}/api/draft_pick?pickNum=${currentDeck.length + 1}`, {
@@ -227,6 +228,8 @@ function DeckBuilder({ cards, laneRewards }) {
 
   const [isTimedDraft, setIsTimedDraft] = useState(localStorage.getItem('isTimedDraft') || false);
   const [draftStartTime, setDraftStartTime] = useState(null);
+
+  const [uniqueDraftIdentifier, setUniqueDraftIdentifier] = useState(null);
 
   console.log(laneRewards);
 
@@ -696,6 +699,7 @@ function DeckBuilder({ cards, laneRewards }) {
             const laneRewardsArray = objectToArray(laneRewards);
             setDrafting(true);
             setCurrentDeck([]);
+            setUniqueDraftIdentifier(generateRandomString(50));
             setCurrentLaneReward(laneRewardsArray[Math.floor(Math.random() * laneRewardsArray.length)]);
             if (isTimedDraft) {
               setDraftStartTime(Date.now());
@@ -730,6 +734,7 @@ function DeckBuilder({ cards, laneRewards }) {
       setCurrentLaneReward={setCurrentLaneReward}
       isTimedDraft={isTimedDraft}
       draftStartTime={draftStartTime}
+      uniqueDraftIdentifier={uniqueDraftIdentifier}
     />
   </CardContent>}
 

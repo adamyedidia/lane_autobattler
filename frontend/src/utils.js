@@ -25,3 +25,13 @@ export function getCardBackgroundColor(card, isDarkMode) {
 export function objectToArray(obj) {
     return Object.keys(obj).map(key => obj[key]);
 }
+
+export function generateRandomString(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
