@@ -14,6 +14,8 @@ from deck import Deck
 from flask import Flask, jsonify, request
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from flask_cors import CORS
+from draft_choice import DraftChoice
+from draft_pick import DraftPick
 from game import Game
 import traceback
 from functools import wraps
@@ -877,6 +879,45 @@ def get_draft_pick(sess):
 def get_draft_pick_and_store_info(sess):
     pick_num = request.args.get('pickNum')
     
+    data = request.json
+
+    if not data:
+        return jsonify({"error": "Invalid data"}), 400
+
+    username = data.get('username')
+
+    last_card_options = data.get('lastCardOptions')
+    last_card_picked = data.get('lastCardPicked')
+
+    print(last_card_options)
+    print(last_card_picked)
+
+    if last_card_options != []:
+        draft_pick = DraftPick(
+            username=username,
+            pick_num=pick_num,
+        )
+        sess.add(draft_pick)
+        sess.commit()
+
+        selected_draft_choice_id = None
+
+        for card in last_card_options:
+            picked = card == last_card_picked
+            draft_choice = DraftChoice(
+                draft_pick_id=draft_pick.id,
+                card=card,
+                picked=picked,
+            )
+            sess.add(draft_choice)
+            sess.commit()
+
+            if picked:
+                selected_draft_choice_id = draft_choice.id
+
+        draft_pick.selected_draft_choice_id = selected_draft_choice_id  # type: ignore
+        sess.commit()
+
     DEFAULT_RARE_CHANCE = 0.07
 
     pick_num_to_rare_chance: dict[Optional[int], float] = {

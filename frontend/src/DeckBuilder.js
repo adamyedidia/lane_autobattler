@@ -66,7 +66,20 @@ function DraftComponent({ cardPool, setCurrentDeck, currentDeck, setDrafting, sa
     // Function to generate four distinct random cards from cardPool
     const fetchDraftOptions = () => {
       let randomCards = [];
-      fetch(`${URL}/api/draft_pick?pickNum=${currentDeck.length + 1}`)
+
+      const data = {
+        username: localStorage.getItem('userName'),
+        lastCardOptions: draftOptions.map(card => card.name),
+        lastCardPicked: currentDeck.length > 0 ? currentDeck[currentDeck.length - 1] : null,
+      }
+
+      fetch(`${URL}/api/draft_pick?pickNum=${currentDeck.length + 1}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
       .then(response => response.json())
       .then((data) => {
           setDraftOptions(data.options);
