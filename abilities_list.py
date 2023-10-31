@@ -409,7 +409,7 @@ ABILITIES: dict[str, Union[Ability, Callable]] = {
     ),
     'EarlyFighter': Ability(
         name='EarlyFighter',
-        description='I attack before other characters.',
+        description='I always attack first.',
     ),
     'PumpOnGainShield': lambda x, y: Ability(
         name='PumpOnGainShield',
@@ -485,6 +485,10 @@ ABILITIES: dict[str, Union[Ability, Callable]] = {
     ),
     'CannotSwitchLanes': Ability(
         name='CannotSwitchLanes',
-        description='I cannot switch lanes.',
+        description='I can\'t switch lanes.',
+    ),
+    'LateFighter': Ability(
+        name='LateFighter',
+        description='I attack after your other characters.',
     ),
 }

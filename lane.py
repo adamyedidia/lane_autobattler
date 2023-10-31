@@ -207,8 +207,13 @@ class Lane:
                              animations: list,
                              game_state: 'GameState', 
                              first_strikers_only: bool = False):
-        characters_that_can_attack = [character for character in self.characters_by_player[attacking_player] if character.can_attack() and (not first_strikers_only or character.has_ability('EarlyFighter'))]            
+        characters_that_can_attack = [character for character in self.characters_by_player[attacking_player] if character.can_attack() and (not first_strikers_only or character.has_ability('EarlyFighter'))]
         
+        characters_that_can_attack_without_last_strike = [character for character in characters_that_can_attack if not character.has_ability('LateFighter')]
+        characters_that_can_attack_with_last_strike = [character for character in characters_that_can_attack if character.has_ability('LateFighter')]
+
+        characters_that_can_attack = [*characters_that_can_attack_without_last_strike, *characters_that_can_attack_with_last_strike]
+
         if len(characters_that_can_attack) == 0:
             done_attacking_by_player[attacking_player] = True
         else:

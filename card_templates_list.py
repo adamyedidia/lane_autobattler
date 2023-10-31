@@ -847,7 +847,7 @@ CARD_TEMPLATES = {
     ),
     'Lefty': CardTemplate(
         name='Lefty',
-        abilities=['HitTowerOtherCharactersSwitchLanes'],
+        abilities=['LateFighter', 'HitTowerOtherCharactersSwitchLanes'],
         cost=2,
         attack=4,
         health=3,
