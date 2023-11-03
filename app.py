@@ -1075,6 +1075,16 @@ def get_old_game_state(sess, game_state_record_id: int):
     return recurse_to_json(GameState.from_json(game_state_record.game_state).to_json())
 
 
+@app.route('/api/old_game_states', methods=['GET'])
+@api_endpoint
+def get_all_old_game_states(sess):
+    game_state_record_tups = (
+        sess.query(GameStateRecord.id, GameStateRecord.player_0_username, GameStateRecord.player_1_username).all()
+    )
+
+    return recurse_to_json([GameState.from_json(game_state_record.game_state).to_json() for game_state_record in game_state_records])
+
+
 @socketio.on('connect')
 def on_connect():
     pass
