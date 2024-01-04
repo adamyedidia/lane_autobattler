@@ -13,7 +13,7 @@ class Card:
         self.health = template.health
 
     def to_character(self, lane, owner_number, owner_username):
-        character = Character(self.template, lane, owner_number, owner_username)
+        character = Character(self.template, lane, owner_number, owner_username, self.id)
         character.current_attack = self.attack
         character.current_health = self.health
         character.max_health = self.health
