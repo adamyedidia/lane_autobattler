@@ -14,8 +14,12 @@ logger = logging.getLogger(__name__)
 
 
 class Character:
-    def __init__(self, template: CardTemplate, lane: 'Lane', owner_number: int, owner_username: str):
-        self.id = generate_unique_id()
+    def __init__(self, template: CardTemplate, lane: 'Lane', owner_number: int, owner_username: str, id: str = None):
+        if id is not None:
+            self.id = id
+        else:
+            self.id = generate_unique_id()
+            
         self.template = template
         self.current_health = template.health
         self.max_health = template.health
@@ -996,3 +1000,4 @@ class Character:
         character.silenced = json['silenced']
         character.shielded = json['shielded']
         return character
+
